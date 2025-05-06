@@ -84,7 +84,7 @@
 
 import React, { useState, useRef } from 'react';
 import { Upload } from 'lucide-react';
-import axios from 'axios';
+import axios,{AxiosError} from 'axios';
 import { Terminal } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
 
@@ -100,36 +100,56 @@ const FileUpload: React.FC = () => {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
+  
     if (file.type !== 'application/pdf') {
       alert('Please select a PDF file.');
       e.target.value = '';
       return;
     }
-
+  
     try {
       const formData = new FormData();
       formData.append('pdf', file);
-
-      const response = await axios.post('https://rag-application-backend-jvja.onrender.com/upload/pdf', formData);
-
-      // Update state to show success alert
+  
+      const response = await axios.post(
+        'https://rag-application-backend-jvja.onrender.com/upload/pdf',
+        formData
+      );
+  
       setFileName(file.name);
       setUploadSuccess(true);
-
-      // Clear alert after 5 seconds
+  
       setTimeout(() => {
         setUploadSuccess(false);
         setFileName(null);
       }, 5000);
-
-      console.log('File uploaded successfully:', response.data);
-    } catch (error) {
+  
+    } catch (error: unknown) {
       console.error('File upload failed:', error);
       setUploadSuccess(false);
+  
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError;
+  
+        if (axiosError.response) {
+          const message = axiosError.response.data?.message ||
+            `Server responded with status ${axiosError.response.status}`;
+          alert(`Upload failed: ${message}`);
+        } else if (axiosError.request) {
+          alert('No response from server. Please check your connection and try again.');
+        } else {
+          alert(`An unexpected Axios error occurred: ${axiosError.message}`);
+        }
+      } else {
+        if (error instanceof Error) {
+          alert(`An unexpected error occurred: ${error.message}`);
+        } else {
+          alert('An unknown error occurred.');
+        }
+      }
+    } finally {
+      e.target.value = '';
     }
-
-    e.target.value = '';
   };
 
   return (
