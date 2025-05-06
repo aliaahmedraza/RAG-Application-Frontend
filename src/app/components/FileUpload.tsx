@@ -119,11 +119,11 @@ const FileUpload: React.FC = () => {
       setFileName(file.name);
       setUploadSuccess(true);
   console.log('File uploaded successfully:', response.data);
-  alert('File uploaded successfully');
-      setTimeout(() => {
-        setUploadSuccess(false);
-        setFileName(null);
-      }, 5000);
+  // alert('File uploaded successfully');
+  //     setTimeout(() => {
+  //       setUploadSuccess(false);
+  //       setFileName(null);
+  //     }, 5000);
   
     } catch (error: unknown) {
       console.error('File upload failed:', error);
