@@ -224,8 +224,6 @@ const FileUpload: React.FC = () => {
     try {
       const formData = new FormData();
       formData.append('pdf', file);
-
-      // Add Content-Type header explicitly for file uploads
       const response = await axios.post(
         'https://rag-application-backend-jvja.onrender.com/upload/pdf',
         formData,
@@ -241,37 +239,31 @@ const FileUpload: React.FC = () => {
       setFileName(file.name);
       setUploadSuccess(true);
       
-      // Show success alert to user
       alert('File uploaded successfully');
       
       setTimeout(() => {
         setUploadSuccess(false);
         setFileName(null);
       }, 5000);
-
+    alert('Now you can ask questions about the uploaded PDF file');
     } catch (error: unknown) {
       console.error('File upload failed:', error);
       
       setUploadSuccess(false);
-      
-      // Enhanced error handling
+
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
         
         if (axiosError.response) {
-          // Server responded with error status
           const message = axiosError.response.data?.toString() || 
                          `Server responded with status ${axiosError.response.status}`;
           alert(`Upload failed: ${message}`);
         } else if (axiosError.request) {
-          // No response received
           alert('No response from server. Please check your connection and try again.');
         } else {
-          // Other Axios errors
           alert(`An unexpected Axios error occurred: ${axiosError.message}`);
         }
       } else {
-        // Non-Axios errors
         if (error instanceof Error) {
           alert(`An unexpected error occurred: ${error.message}`);
         } else {
@@ -280,13 +272,12 @@ const FileUpload: React.FC = () => {
       }
     } finally {
       setIsLoading(false);
-      e.target.value = ''; // Always reset input value
+      e.target.value = ''; 
     }
   };
 
   return (
     <div className="space-y-4">
-      {/* Conditional Alert Component */}
       {uploadSuccess && fileName && (
         <Alert className="animate-fade-in-down">
           <Terminal className="h-4 w-4" />
@@ -296,18 +287,14 @@ const FileUpload: React.FC = () => {
           </AlertDescription>
         </Alert>
       )}
-
-      {/* Hidden File Input */}
       <input
         type="file"
         accept="application/pdf"
         ref={inputRef}
         onChange={handleFileChange}
         className="hidden"
-        disabled={isLoading} // Prevent multiple uploads
+        disabled={isLoading} 
       />
-
-      {/* Upload Button */}
       <button
         type="button"
         onClick={handleButtonClick}
