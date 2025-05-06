@@ -7,6 +7,8 @@ import { Alert, AlertDescription, AlertTitle} from "@/components/ui/alert"
 import { Terminal } from "lucide-react"
 const FileUpload: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [uploadSuccess, setUploadSuccess] = React.useState(false);
+  const [fileName, setFileName] = React.useState<string | null>(null);
 
   const handleButtonClick = () => {
     inputRef.current?.click();
@@ -27,14 +29,14 @@ const FileUpload: React.FC = () => {
       formData.append('pdf', file);
 
       const response = await axios.post('https://rag-application-backend-jvja.onrender.com/upload/pdf', formData);
-<Alert>
-  <Terminal className="h-4 w-4" />
-  <AlertTitle>File Uploaded</AlertTitle>
-  <AlertDescription>
-    You had successfully uploaded the file: {file.name}
-  </AlertDescription>
-</Alert>
+      setFileName(file.name);
+      setUploadSuccess(true);
 
+      // Optional: Hide alert after 5 seconds
+      setTimeout(() => {
+        setUploadSuccess(false);
+        setFileName(null);
+      }, 5000);
       console.log('File uploaded successfully:', response.data);
     } catch (error) {
       console.error('File upload failed:', error);
@@ -44,6 +46,15 @@ const FileUpload: React.FC = () => {
 
   return (
     <div>
+        {uploadSuccess && fileName && (
+        <Alert>
+          <Terminal className="h-4 w-4" />
+          <AlertTitle>File Uploaded</AlertTitle>
+          <AlertDescription>
+            You had successfully uploaded the file: {fileName}
+          </AlertDescription>
+        </Alert>
+      )}
       <input
         type="file"
         accept="application/pdf"
