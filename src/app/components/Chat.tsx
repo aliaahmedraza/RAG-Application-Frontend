@@ -20,7 +20,7 @@ const ChatComponent: React.FC = () => {
             { role: "user", content: message }
         ]);
 
-        const res = await fetch(`http://localhost:3006/chat?message=${encodeURIComponent(message)}`);
+        const res = await fetch(`https://rag-application-backend-f3xv.onrender.com/chat?message=${encodeURIComponent(message)}`);
         const data = await res.json();
 
         setChatHistory((prev) => [

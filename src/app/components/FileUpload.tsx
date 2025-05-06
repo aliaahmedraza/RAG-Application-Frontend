@@ -24,7 +24,7 @@ const FileUpload: React.FC = () => {
       const formData = new FormData();
       formData.append('pdf', file);
 
-      const response = await axios.post('http://localhost:3006/upload/pdf', formData);
+      const response = await axios.post('https://rag-application-backend-f3xv.onrender.com/upload/pdf', formData);
 
       console.log('File uploaded successfully:', response.data);
     } catch (error) {
