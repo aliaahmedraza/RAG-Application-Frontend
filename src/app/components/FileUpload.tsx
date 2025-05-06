@@ -3,12 +3,12 @@
 import React, { useRef } from 'react';
 import { Upload } from 'lucide-react';
 import axios from 'axios';
-import { Alert, AlertDescription, AlertTitle} from "@/components/ui/alert"
-import { Terminal } from "lucide-react"
+// import { Alert, AlertDescription, AlertTitle} from "@/components/ui/alert"
+// import { Terminal } from "lucide-react"
 const FileUpload: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [uploadSuccess, setUploadSuccess] = React.useState(false);
-  const [fileName, setFileName] = React.useState<string | null>(null);
+  // const [uploadSuccess, setUploadSuccess] = React.useState(false);
+  // const [fileName, setFileName] = React.useState<string | null>(null);
 
   const handleButtonClick = () => {
     inputRef.current?.click();
@@ -29,12 +29,12 @@ const FileUpload: React.FC = () => {
       formData.append('pdf', file);
 
       const response = await axios.post('https://rag-application-backend-jvja.onrender.com/upload/pdf', formData);
-      setFileName(file.name);
-      setUploadSuccess(true);
-      setTimeout(() => {
-        setUploadSuccess(false);
-        setFileName(null);
-      }, 5000);
+      // setFileName(file.name);
+      // setUploadSuccess(true);
+      // setTimeout(() => {
+      //   setUploadSuccess(false);
+      //   setFileName(null);
+      // }, 5000);
       console.log('File uploaded successfully:', response.data);
     } catch (error) {
       console.error('File upload failed:', error);
@@ -44,7 +44,7 @@ const FileUpload: React.FC = () => {
 
   return (
     <div>
-        {uploadSuccess && fileName && (
+        {/* {uploadSuccess && fileName && (
         <Alert>
           <Terminal className="h-4 w-4" />
           <AlertTitle>File Uploaded</AlertTitle>
@@ -52,7 +52,7 @@ const FileUpload: React.FC = () => {
             You had successfully uploaded the file: {fileName}
           </AlertDescription>
         </Alert>
-      )}
+      )} */}
       <input
         type="file"
         accept="application/pdf"
