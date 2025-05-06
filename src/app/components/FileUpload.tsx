@@ -3,6 +3,8 @@
 import React, { useRef } from 'react';
 import { Upload } from 'lucide-react';
 import axios from 'axios';
+import { Alert, AlertDescription, AlertTitle} from "@/components/ui/alert"
+import { Terminal } from "lucide-react"
 const FileUpload: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -25,6 +27,13 @@ const FileUpload: React.FC = () => {
       formData.append('pdf', file);
 
       const response = await axios.post('https://rag-application-backend-jvja.onrender.com/upload/pdf', formData);
+<Alert>
+  <Terminal className="h-4 w-4" />
+  <AlertTitle>File Uploaded</AlertTitle>
+  <AlertDescription>
+    You had successfully uploaded the file: {file.name}
+  </AlertDescription>
+</Alert>
 
       console.log('File uploaded successfully:', response.data);
     } catch (error) {
